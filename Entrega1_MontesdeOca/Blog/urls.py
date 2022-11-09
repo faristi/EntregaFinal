@@ -14,6 +14,7 @@ urlpatterns = [
 
     path("agregarImagen", views.agregarImagen, name="agregarImagen"),
     path("editarPerfil", views.editar_perfil, name="editarPerfil"),
+    path("verPerfil", views.ver_perfil, name="verPerfil"),
 
     #Authentication
     path('signup/', views.signupuser, name= 'signupuser'),

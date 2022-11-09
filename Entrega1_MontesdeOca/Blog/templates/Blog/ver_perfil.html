@@ -1,0 +1,15 @@
+{% extends 'Blog/encabezado.html' %} 
+
+{% load static %} 
+
+{% block contenidoQueCambia %}
+
+<h4>Bienvenido <i>{{ user.first_name }}</i></h4>
+
+<a href="{% url 'editarPerfil' %}">Editar Perfil</a>
+
+<li>{{user.email}}</li>
+<li>{{user.first_name}}</li>
+<li>{{user.last_name}}</li>
+
+{% endblock %}

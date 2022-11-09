@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Autor(models.Model):
@@ -21,7 +22,7 @@ class Articulo(models.Model):
     subtitulo = models.CharField(max_length=60)
     texto = models.TextField()
     fecha = models.DateField(null=False)
-    autor = models.ForeignKey(Autor, on_delete=models.CASCADE)
+    autor = models.ForeignKey(User, on_delete=models.CASCADE)
     imagen = models.ForeignKey(ImagenArticulo, on_delete=models.CASCADE)
 
     def __str__(self):

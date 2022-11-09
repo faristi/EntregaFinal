@@ -35,6 +35,12 @@ def signupuser(request):
         else: #mismatch password
             return render(request, 'Blog/signupuser.html', {'form':UserCreationForm(), 'error': "passwords did not match"})
 
+@login_required
+def ver_perfil(request):
+    user = request.user
+    return render(request, "Blog/ver_perfil.html", {'user':user})
+
+@login_required
 def editar_perfil(request):
     user = request.user
     if request.method != "POST":
@@ -73,7 +79,7 @@ def logoutuser(request):
         logout(request)
         return redirect('home')
 
-
+@login_required
 def agregarImagen(request):
     if request.method != "POST":
         form = ImagenArticuloForm()
@@ -93,21 +99,20 @@ class ArticuloList(ListView):
     model = Articulo
     template_name = "Blog/articulos_list.html"
 
-
-class ArticuloDetalle(LoginRequiredMixin, DetailView):
+class ArticuloDetalle(DetailView):
     model = Articulo
     template_name = "Blog/articulo_detalle.html"
 
-class ArticuloEdit(UpdateView):
+class ArticuloEdit(LoginRequiredMixin, UpdateView):
     model = Articulo
     success_url = "/articulo/list"
     fields = ['titulo', 'subtitulo', 'texto', 'fecha', 'autor', 'imagen']
 
-class ArticuloDelete(DeleteView):
+class ArticuloDelete(LoginRequiredMixin, DeleteView):
     model = Articulo
     success_url = "/articulo/list"
 
-class ArticuloCreate(CreateView):
+class ArticuloCreate(LoginRequiredMixin, CreateView):
     model = Articulo
     success_url = "/articulo/list"
     fields = ['titulo', 'subtitulo', 'texto', 'fecha', 'autor', 'imagen']
