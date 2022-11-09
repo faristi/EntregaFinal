@@ -4,7 +4,9 @@
 
 {% block contenidoQueCambia %}
 
-<h4>Editar perfil de: <i>{{ user }}</i></h4>
+<h2 class="mb-4">Editar perfil</h2>
+<h5>Usuario <i>{{ user }}</i></h5>
+
 <form action="" method="POST">
     {% csrf_token %}
     {{ form.as_p }}

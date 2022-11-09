@@ -4,13 +4,14 @@
 
 {% block contenidoQueCambia %}
 
-    <h1>Listado de Artículos</h1>
+    <h2 class="mb-4">Listado de Artículos</h2>
     <ul>
-
         <a href="{% url 'nuevoArticulo' %}">Crear un nuevo Articulo</a>
         <br>
         <br>
-        <h4>Artículos:</h4>
+
+        <h5>Artículos:</h5>
+        <br>
 
         {% for articulo in object_list %}
             <li>
@@ -25,7 +26,10 @@
                 </p>
 
             </li>
+        
+
         {% endfor %}
 
     </ul>
+
 {% endblock %}

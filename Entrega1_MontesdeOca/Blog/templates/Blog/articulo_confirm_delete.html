@@ -4,11 +4,11 @@
 
 {% block contenidoQueCambia %}
 
-    <h1>Eliminar Articulo</h1>
-    <h2>{{articulo.titulo}}</h2>
+    <h2 class="mb-4">Eliminar Articulo</h2>
+    <h2 class="mb-4">{{articulo.titulo}}</h2>
     <br>
     <form method="post">{% csrf_token %}
-        <h4>¿Estás seguro que deseas borrar permanentemente el Articulo {{articulo.titulo}}?</h4>
+        <h5>¿Estás seguro que deseas borrar permanentemente el Articulo {{articulo.titulo}}?</h5>
         <input type="submit" value="Eliminar" />
     </form>
 

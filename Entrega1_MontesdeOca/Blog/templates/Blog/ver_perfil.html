@@ -4,7 +4,9 @@
 
 {% block contenidoQueCambia %}
 
-<h4>Bienvenido <i>{{ user.first_name }}</i></h4>
+<h2 class="mb-4">Perfil</h2>
+
+<h5>Bienvenido <i>{{ user.first_name }}</i></h5>
 
 <a href="{% url 'editarPerfil' %}">Editar Perfil</a>
 
