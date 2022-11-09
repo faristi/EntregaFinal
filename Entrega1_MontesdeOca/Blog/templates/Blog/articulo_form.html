@@ -1,0 +1,15 @@
+{% extends 'Blog/encabezado.html' %} 
+
+{% load static %} 
+
+{% block contenidoQueCambia %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Enviar" />
+</form>
+
+<a href="{% url 'agregarImagen' %}">Agregar una nueva Imagen</a>
+
+{% endblock %}

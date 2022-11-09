@@ -1,0 +1,15 @@
+{% extends 'Blog/encabezado.html' %} 
+
+{% load static %} 
+
+{% block contenidoQueCambia %}
+
+    <h1>Eliminar Articulo</h1>
+    <h2>{{articulo.titulo}}</h2>
+    <br>
+    <form method="post">{% csrf_token %}
+        <h4>¿Estás seguro que deseas borrar permanentemente el Articulo {{articulo.titulo}}?</h4>
+        <input type="submit" value="Eliminar" />
+    </form>
+
+{% endblock %}

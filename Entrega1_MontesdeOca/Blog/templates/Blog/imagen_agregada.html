@@ -1,0 +1,13 @@
+{% extends 'Blog/encabezado.html' %} 
+
+{% load static %} 
+
+{% block contenidoQueCambia %}
+
+    <h1>Cargar nueva Imagen</h1>
+    <br>
+    <h5>La imagen fue agregada correctamente.</h5>
+    <br>
+    <a href="{% url 'nuevoArticulo' %}">Regresar a la creación de Articulos</a>
+
+{% endblock %}

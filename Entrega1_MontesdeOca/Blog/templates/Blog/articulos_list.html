@@ -1,0 +1,31 @@
+{% extends 'Blog/encabezado.html' %} 
+
+{% load static %} 
+
+{% block contenidoQueCambia %}
+
+    <h1>Listado de Artículos</h1>
+    <ul>
+
+        <a href="{% url 'nuevoArticulo' %}">Crear un nuevo Articulo</a>
+        <br>
+        <br>
+        <h4>Artículos:</h4>
+
+        {% for articulo in object_list %}
+            <li>
+                <h5>{{articulo.titulo}}</h5>
+                <h6>{{articulo.subtitulo}}</h6>
+                <h7>Autor: {{articulo.autor}}, publicado {{articulo.fecha}}</h7>
+                <br>
+                <p> 
+                    <a href="{% url 'verArticulo' articulo.id %}">Leer</a>
+                    <a href="{% url 'editarArticulo' articulo.id %}">Editar</a>
+                    <a href="{% url 'borrarArticulo' articulo.id %}">Borrar</a>
+                </p>
+
+            </li>
+        {% endfor %}
+
+    </ul>
+{% endblock %}
