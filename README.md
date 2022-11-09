@@ -1,7 +1,7 @@
-Entrega Final
-(AUN SIN FINALIZAR)
+## Entrega Final
+### (AUN SIN FINALIZAR)
 
 Participantes:
-Francisco Apa
-Fernando Montes de Oca
-Federico Aristimuño
+- Francisco Apa
+- Fernando Montes de Oca
+- Federico Aristimuño
