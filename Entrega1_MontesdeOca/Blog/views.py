@@ -1,12 +1,12 @@
 
 from sqlite3 import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import AutorForm, ImagenArticuloForm, UserEditionForm#, ArticuloForm
+from .forms import ImagenArticuloForm, UserEditionForm#, ArticuloForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from .models import Articulo, Autor, ImagenArticulo
+from .models import Articulo, ImagenArticulo
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView

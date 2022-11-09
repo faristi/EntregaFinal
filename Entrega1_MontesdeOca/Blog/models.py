@@ -2,14 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Autor(models.Model):
-    nombre = models.CharField(max_length=40)
-    apellido = models.CharField(max_length=40)
-    profesion = models.CharField(max_length=40)
-
-    def __str__(self):
-        return self.nombre + " " + self.apellido
-
 class ImagenArticulo(models.Model):
     nombre = models.CharField(max_length=40)
     imagen = models.ImageField(upload_to='imagenes', null=True, blank=True)
@@ -46,3 +38,12 @@ class Articulo(models.Model):
 
 #     def __str__(self):
 #         return self.lector
+
+
+# class Autor(models.Model):
+#     nombre = models.CharField(max_length=40)
+#     apellido = models.CharField(max_length=40)
+#     profesion = models.CharField(max_length=40)
+
+#     def __str__(self):
+#         return self.nombre + " " + self.apellido

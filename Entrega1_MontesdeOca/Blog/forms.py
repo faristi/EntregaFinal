@@ -1,14 +1,11 @@
 from django.forms import ModelForm
-from .models import Autor, Articulo, ImagenArticulo
+from .models import ImagenArticulo
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 
-class AutorForm(ModelForm):
-    class Meta:
-        model = Autor
-        fields = ["nombre", "apellido", "profesion"]
+# 
 
 class ImagenArticuloForm(ModelForm):
     class Meta:
@@ -33,3 +30,8 @@ class UserEditionForm(UserCreationForm):
 #     class Meta:
 #         model = Articulo
 #         fields = ["titulo", "texto", "autor", "fecha"]
+
+#class AutorForm(ModelForm):
+#     class Meta:
+#         model = Autor
+#         fields = ["nombre", "apellido", "profesion"]
