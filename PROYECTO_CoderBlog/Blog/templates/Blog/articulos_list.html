@@ -1,0 +1,41 @@
+{% extends 'Blog/encabezado.html' %} 
+
+{% load static %} 
+
+{% block contenidoQueCambia %}
+
+    <h2 class="mb-4">Listado de Artículos</h2>
+    <ul>
+        <a href="{% url 'nuevoArticulo' %}">Crear un nuevo Articulo</a>
+        <br>
+        <br>
+
+        <h5>Artículos:</h5>
+        <br>
+
+        {% if object_list is None %}
+        No hay Articulos para mostrar.
+        {% endif %}
+        {% for articulo in object_list %}
+            <li>
+                <h5>{{articulo.titulo}}</h5>
+                <h6>{{articulo.subtitulo}}</h6>
+                <h7>Autor: {{articulo.autor.get_full_name}}, publicado {{articulo.fecha}}</h7>
+                <br>
+                <p> 
+                    <a href="{% url 'verArticulo' articulo.id %}">Leer</a>
+                    {% if articulo.autor == request.user %}
+                    <a href="{% url 'editarArticulo' articulo.id %}">Editar</a>
+                    <a href="{% url 'borrarArticulo' articulo.id %}">Borrar</a>
+                    {% endif %}
+                </p>
+
+            </li>
+            {% empty %}
+            <p>No hay páginas aún.</p>
+
+        {% endfor %}
+
+    </ul>
+
+{% endblock %}

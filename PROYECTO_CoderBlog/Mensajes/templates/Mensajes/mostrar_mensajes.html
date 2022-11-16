@@ -1,0 +1,19 @@
+{% extends 'Blog/encabezado.html' %} 
+
+{% load static %} 
+
+{% block contenidoQueCambia %}
+
+<h2 class="mb-4">Mensajes para el usuario {{ user.username }}</h2>
+<ul>
+    {% for mensaje in mensajes %}
+    <li>
+        <h6>Mensaje de Usuario {{mensaje.remitente}}:</h6>
+        <p>{{ mensaje.texto }}</p>
+    </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'verPerfil' %}">Regresar a mi perfil.</a>
+
+{% endblock %}
