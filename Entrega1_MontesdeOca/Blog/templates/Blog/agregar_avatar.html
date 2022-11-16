@@ -1,0 +1,17 @@
+{% extends 'Blog/encabezado.html' %} 
+
+{% load static %} 
+
+{% block contenidoQueCambia %}
+
+    <h2 class="mb-4">Elegir nuevo Avatar</h2>
+    <form method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+        {{form.as_p}}
+
+        <input type="submit" value="Aceptar">
+
+    </form>
+
+{% endblock %}

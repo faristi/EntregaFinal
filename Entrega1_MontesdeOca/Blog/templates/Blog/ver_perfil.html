@@ -7,11 +7,28 @@
 <h2 class="mb-4">Perfil</h2>
 
 <h5>Bienvenido <i>{{ user.first_name }}</i></h5>
-
+<img width="40px" src="{{avatar_user}}">
+<br>
 <a href="{% url 'editarPerfil' %}">Editar Perfil</a>
+<a href="{% url 'password_change' %}">Cambiar Contraseña</a>
+{% if tiene_avatar %}
+<a href="{% url 'agregar_avatar' %}">Modificar Avatar</a>
+{% endif %}
+{% if not tiene_avatar %}
+<a href="{% url 'agregar_avatar' %}">Agregar Avatar</a>
+{% endif %}
 
-<li>{{user.email}}</li>
-<li>{{user.first_name}}</li>
-<li>{{user.last_name}}</li>
+<li>Usuario: {{user.username}}</li>
+<li>Nombre: {{user.first_name}}</li>
+<li>Apellido: {{user.last_name}}</li>
+<li>Email: {{user.email}}</li>
+{% if tiene_info %}
+<li>Descripción: {{descripcion}}</li>
+<li>URL: <a href={{link_url}}>{{link_url}}</a></li>
+{% endif %}
+{% if not tiene_info %}
+<li>Descripción: <i>{{descripcion}}</i></li>
+<li>URL: <i>{{link_url}}</i></li>
+{% endif %}
 
 {% endblock %}

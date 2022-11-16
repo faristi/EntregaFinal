@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LogoutView, PasswordChangeView
 
 urlpatterns = [
     path("", views.home, name="home"),
@@ -12,7 +12,8 @@ urlpatterns = [
     path('borrar/<pk>', views.ArticuloDelete.as_view(), name='borrarArticulo'),
     path('nuevo/', views.ArticuloCreate.as_view(), name='nuevoArticulo'),
 
-    path("agregarImagen", views.agregarImagen, name="agregarImagen"),
+    path("agregar_avatar", views.agregar_avatar, name="agregar_avatar"),
+    path("agregar_imagen", views.agregar_imagen, name="agregar_imagen"),
     path("editarPerfil", views.editar_perfil, name="editarPerfil"),
     path("verPerfil", views.ver_perfil, name="verPerfil"),
 
@@ -20,13 +21,6 @@ urlpatterns = [
     path('signup/', views.signupuser, name= 'signupuser'),
     path('logout/', LogoutView.as_view(template_name='Blog/logoutuser.html'), name= 'logoutuser'),
     path('login/', views.loginuser, name= 'loginuser'),
-
-    #path('logout/', views.logoutuser, name= 'logoutuser'),
-    # path("crearAutor", views.crearAutor, name="crearAutor"),
-    # path("crearArticulo", views.crearArticulo, name="crearArticulo"),
-    # path("articulos", views.articulos, name="articulos"),
-    # path("crearLector", views.crearLector, name="crearLector"),
-    # path("reseñas", views.reseñas, name="reseñas"),
-    # path("crearReseña", views.crearReseña, name="crearReseña"),
-    # path("buscar", views.buscar, name="buscar"),
+    path('password/', PasswordChangeView.as_view(), name='password_change'),
+    path("", views.home, name='password_change_done'),
 ]

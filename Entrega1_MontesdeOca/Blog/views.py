@@ -1,12 +1,12 @@
 
 from sqlite3 import IntegrityError
-from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ImagenArticuloForm, UserEditionForm#, ArticuloForm
+from django.shortcuts import render, redirect
+from .forms import ImagenArticuloForm, UserEditionForm, AvatarForm, InfoForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from .models import Articulo, ImagenArticulo
+from .models import Articulo, Avatar, Info
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -38,27 +38,53 @@ def signupuser(request):
 @login_required
 def ver_perfil(request):
     user = request.user
-    return render(request, "Blog/ver_perfil.html", {'user':user})
+    avatar_user = Avatar.objects.filter(user=request.user).first()
+    info_user = Info.objects.filter(user=request.user).first()
+    if avatar_user is not None:
+        avatar_user_url = avatar_user.imagen.url
+        tiene_avatar = True
+    else:
+        avatar_user_url = "/media/avatares/png-default-avatar-2.png"
+        tiene_avatar = False
+    if info_user is not None:
+        descripcion = info_user.descripcion
+        link_url = info_user.link_url
+        tiene_info = True
+    else:
+        descripcion = "Agregue su Descripción en Editar Perfil"
+        link_url = "Agregue su URL en Editar Perfil"
+        tiene_info = False
+    return render(request, "Blog/ver_perfil.html", {'user':user, 'avatar_user':avatar_user_url, 'tiene_avatar':tiene_avatar, 'descripcion':descripcion, 'link_url':link_url, 'tiene_info':tiene_info})
 
 @login_required
 def editar_perfil(request):
     user = request.user
+    info = Info.objects.filter(user=request.user).first()
     if request.method != "POST":
-        form = UserEditionForm(initial={"email": user.email})
+        form_user = UserEditionForm(initial={"email": user.email, "first_name": user.first_name, "last_name": user.last_name})
+        if info is not None:
+            form_info = InfoForm(initial={"descripcion": info.descripcion, "link_url": info.link_url})
+        else:
+            form_info = InfoForm(initial={"descripcion": "Sin descripcion"})
     else:
-        form = UserEditionForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            user.email = data["email"]
-            user.first_name = data["first_name"]
-            user.last_name = data["last_name"]
-            user.set_password(data["password1"])
+        form_user = UserEditionForm(request.POST)
+        form_info = InfoForm(request.POST)
+        
+        if form_user.is_valid() and form_info.is_valid():
+            data_user = form_user.cleaned_data
+            user.email = data_user["email"]
+            user.first_name = data_user["first_name"]
+            user.last_name = data_user["last_name"]
             user.save()
+            Info.objects.filter(user=request.user).delete()
+            form_info.instance.user = request.user
+            form_info.save()
             return render(request, "Blog/home.html")
 
     contexto = {
         "user": user,
-        "form": form,
+        "form_user": form_user,
+        "form_info": form_info,
     }
     return render(request, "Blog/editar_perfil.html", contexto)
 
@@ -80,18 +106,32 @@ def logoutuser(request):
         return redirect('home')
 
 @login_required
-def agregarImagen(request):
+def agregar_imagen(request):
     if request.method != "POST":
         form = ImagenArticuloForm()
     else:
         form = ImagenArticuloForm(request.POST, request.FILES)
         if form.is_valid():
-            #ImagenArticulo.objects.filter(user=request.user).delete()
             form.save()
             return render(request, "Blog/imagen_agregada.html")
 
     contexto = {"form": form}
-    return render(request, "Blog/agregarImagen.html", contexto)
+    return render(request, "Blog/agregar_imagen.html", contexto)
+
+@login_required
+def agregar_avatar(request):
+    if request.method != "POST":
+        form = AvatarForm()
+    else:
+        form = AvatarForm(request.POST, request.FILES)
+        if form.is_valid():
+            Avatar.objects.filter(user=request.user).delete()
+            form.instance.user = request.user
+            form.save()
+            return render(request, "Blog/avatar_agregado.html")
+
+    contexto = {"form": form}
+    return render(request, "BLog/agregar_avatar.html", contexto)
 
 ############# Clases basadas en vistas para ver, editar y eliminar Articulos
 
@@ -103,10 +143,20 @@ class ArticuloDetalle(DetailView):
     model = Articulo
     template_name = "Blog/articulo_detalle.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        avatar_autor = Avatar.objects.filter(user__username=kwargs['object'].autor).first()
+        if avatar_autor is not None:
+            avatar_autor_url = avatar_autor.imagen.url
+        else:
+            avatar_autor_url = "/media/avatares/png-default-avatar-2.png"
+        context['avatar_autor'] = avatar_autor_url
+        return context
+
 class ArticuloEdit(LoginRequiredMixin, UpdateView):
     model = Articulo
     success_url = "/articulo/list"
-    fields = ['titulo', 'subtitulo', 'texto', 'fecha', 'autor', 'imagen']
+    fields = ['titulo', 'subtitulo', 'texto', 'fecha', 'imagen']
 
 class ArticuloDelete(LoginRequiredMixin, DeleteView):
     model = Articulo
@@ -115,99 +165,9 @@ class ArticuloDelete(LoginRequiredMixin, DeleteView):
 class ArticuloCreate(LoginRequiredMixin, CreateView):
     model = Articulo
     success_url = "/articulo/list"
-    fields = ['titulo', 'subtitulo', 'texto', 'fecha', 'autor', 'imagen']
-    
+    fields = ['titulo', 'subtitulo', 'texto', 'fecha', 'imagen']
 
+    def form_valid(self, form):
+        form.instance.autor = self.request.user
+        return super().form_valid(form)
 
-###################### BORRAR??? ########################
-
-# @login_required
-# def buscar(request):
-
-#     nombre_a_buscar = request.GET.get("nombre")
-#     autores = Autor.objects.filter(nombre=nombre_a_buscar)
-
-#     contexto = {"nombre": nombre_a_buscar, "autores_encontrados": autores}
-
-#     return render(request, "Blog/busqueda.html", contexto)
-
-# @login_required
-# def crearAutor(request):
-#     if request.method == "GET":
-#         return render(request, "Blog/crearAutor.html", {"form": AutorForm()})
-#     else:
-#         try:
-#             form = AutorForm(request.POST)
-#             new_autor = form.save(commit=False)
-#             new_autor.save()
-#             return redirect("/")
-#         except ValueError:
-#             return render(
-#                 request,
-#                 "Blog/crearAutor.html",
-#                 {"form": AutorForm(), "error": "datos incorrectos, intente de nuevo"},
-#             )
-
-# @login_required
-# def crearArticulo(request):
-#     if request.method == "GET":
-#         return render(request, "Blog/crearArticulo.html", {"form": ArticuloForm()})
-#     else:
-#         try:
-#             form = ArticuloForm(request.POST)
-#             new_articulo = form.save(commit=False)
-#             new_articulo.save()
-#             return redirect("/")
-#         except ValueError:
-#             return render(
-#                 request,
-#                 "Blog/crearArticulo.html",
-#                 {
-#                     "form": ArticuloForm(),
-#                     "error": "datos incorrectos, intente de nuevo",
-#                 },
-#             )
-
-# @login_required
-# def articulos(request):
-#     articulos = Articulo.objects.all()
-#     return render(request, "Blog/articulos.html", {"articulos": articulos})
-
-# @login_required
-# def crearLector(request):
-#     if request.method == "GET":
-#         return render(request, "Blog/crearLector.html", {"form": LectorForm()})
-#     else:
-#         try:
-#             form = LectorForm(request.POST)
-#             new_lector = form.save(commit=False)
-#             new_lector.save()
-#             return redirect("/")
-#         except ValueError:
-#             return render(
-#                 request,
-#                 "Blog/crearLector.html",
-#                 {"form": LectorForm(), "error": "datos incorrectos, intente de nuevo"},
-#             )
-
-# @login_required
-# def crearReseña(request):
-#     if request.method == "GET":
-#         return render(request, "Blog/crearLector.html", {"form": ReseñaForm()})
-#     else:
-#         try:
-#             form = ReseñaForm(request.POST)
-#             new_reseña = form.save(commit=False)
-#             new_reseña.save()
-#             return redirect("/")
-#         except ValueError:
-#             return render(
-#                 request,
-#                 "Blog/crearLector.html",
-#                 {"form": ReseñaForm(), "error": "datos incorrectos, intente de nuevo"},
-#             )
-
-# @login_required
-# def reseñas(request):
-#     reseñas = Reseña.objects.all()
-#     return render(request, "Blog/reseñas.html", {"reseñas": reseñas})

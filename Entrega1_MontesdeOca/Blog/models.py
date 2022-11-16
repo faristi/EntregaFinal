@@ -9,6 +9,15 @@ class ImagenArticulo(models.Model):
     def __str__(self):
         return self.nombre
 
+class Avatar(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to="avatares", null=True, blank=True)
+
+class Info(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    descripcion = models.CharField(max_length=200)
+    link_url = models.URLField(max_length = 200)
+
 class Articulo(models.Model):
     titulo = models.CharField(max_length=60)
     subtitulo = models.CharField(max_length=60)
@@ -19,31 +28,3 @@ class Articulo(models.Model):
 
     def __str__(self):
         return self.titulo
-
-
-# # separar reseña y lector en dos clases distintas
-# class Lector(models.Model):
-#     nombre = models.CharField(max_length=40)
-#     apellido = models.CharField(max_length=40)
-#     nivel = models.CharField(max_length=40)
-
-#     def __str__(self):
-#         return self.nombre + " " + self.apellido
-
-
-# class Reseña(models.Model):
-#     lector = models.ForeignKey(Lector, on_delete=models.CASCADE)
-#     articulo = models.ForeignKey(Articulo, null=True, on_delete=models.SET_NULL)
-#     reseña = models.TextField()
-
-#     def __str__(self):
-#         return self.lector
-
-
-# class Autor(models.Model):
-#     nombre = models.CharField(max_length=40)
-#     apellido = models.CharField(max_length=40)
-#     profesion = models.CharField(max_length=40)
-
-#     def __str__(self):
-#         return self.nombre + " " + self.apellido

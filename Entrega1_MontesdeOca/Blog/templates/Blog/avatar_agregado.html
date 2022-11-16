@@ -1,0 +1,13 @@
+{% extends 'Blog/encabezado.html' %} 
+
+{% load static %} 
+
+{% block contenidoQueCambia %}
+
+    <h2 class="mb-4">Cargar nuevo Avatar</h2>
+    <br>
+    <h5>Su avatar fue modificado correctamente.</h5>
+    <br>
+    <a href="{% url 'verPerfil' %}">Regresar a mi perfil.</a>
+
+{% endblock %}
