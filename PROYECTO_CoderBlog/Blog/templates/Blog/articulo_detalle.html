@@ -4,10 +4,9 @@
 
 {% block contenidoQueCambia %}
 
-    <h2 class="mb-4">Articulo {{articulo.titulo}}</h2>
+    <h2 class="mb-2">Articulo {{articulo.titulo}}</h2>
     <h3>{{articulo.subtitulo}}</h3>
-    <h6>Publicado por {{articulo.autor.get_full_name}} en {{articulo.fecha}}</h6>
-    <img width="40px" src="{{avatar_autor}}">
+    <h6><img width="40px" src="{{avatar_autor}}"> Publicado por {{articulo.autor.get_full_name}} en {{articulo.fecha}}</h6>
     <br>
     <p>{{articulo.texto}}</p>
     <br>
